@@ -28,8 +28,6 @@ services:
       - "8000:8000"
     environment:
       - DEBUG=True
-      - SECRET_KEY=django-insecure-65&pm0k)j$4#&($cebc80@gpi0!!%z4qw!htmgcu!hpgbetk0e
-      - DATABASE_URL=postgresql://auth_user:auth_password123@postgres:5432/auth_service_db
       - REDIS_URL=redis://redis:6379/0
     depends_on:
       - postgres
