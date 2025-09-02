@@ -1,0 +1,34 @@
+FROM python:3.11-slim
+
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+# Set work directory
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        postgresql-client \
+        gcc \
+        python3-dev \
+        musl-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy project
+COPY . .
+
+# Expose port
+EXPOSE 8000
+
+# Run the application
+CMD ["sh", "-c", " \
+    python3 manage.py makemigrations --noinput && \
+    python3 manage.py migrate --noinput && \
+    python3 manage.py collectstatic --noinput && \
+    gunicorn --bind  0.0.0.0:8000 --workers 4 auth_service.wsgi:application"]

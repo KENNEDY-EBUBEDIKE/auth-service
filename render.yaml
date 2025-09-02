@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: auth-service
+    env: python
+    buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --noinput"
+    startCommand: "python manage.py makemigrations && python manage.py migrate && gunicorn auth_service.wsgi:application --workers 4 --bind 0.0.0.0:$PORT"
+    envVars:
+      - key: DEBUG
+        value: false
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: auth-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: auth-redis
+          property: connectionString
+
+  - type: redis
+    name: auth-redis
+    maxmemoryPolicy: allkeys-lru
+    plan: starter
+
+databases:
+  - name: auth-db
+    databaseName: auth_service_db
+    user: auth_user
