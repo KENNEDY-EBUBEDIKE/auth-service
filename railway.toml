@@ -1,12 +1,5 @@
 [build]
 builder = "DOCKERFILE"
-dockerfilePath = "Dockerfile"
 
 [deploy]
-startCommand = "sh -c 'python3 manage.py makemigrations --noinput && python3 manage.py migrate --noinput && python3 manage.py collectstatic --noinput && gunicorn --bind 0.0.0.0:$PORT --workers 4 auth_service.wsgi:application'"
-restartPolicyType = "ON_FAILURE"
-restartPolicyMaxRetries = 10
-
-[build.watchPatterns]
-include = ["**/*.py", "**/requirements.txt", "**/Dockerfile"]
-exclude = ["**/__pycache__/**", "**/.git/**", "**/node_modules/**"]
+startCommand = "sh -c 'python manage.py migrate && python manage.py collectstatic --noinput && gunicorn --bind 0.0.0.0:$PORT auth_service.wsgi:application'"
