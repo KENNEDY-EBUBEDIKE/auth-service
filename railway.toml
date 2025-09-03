@@ -3,3 +3,7 @@ builder = "DOCKERFILE"
 
 [deploy]
 startCommand = "sh -c 'python manage.py migrate && python manage.py collectstatic --noinput && gunicorn --bind 0.0.0.0:$PORT auth_service.wsgi:application'"
+
+healthcheckPath = "/swagger/"
+healthcheckTimeout = 300
+restartPolicyType = "ON_FAILURE"
