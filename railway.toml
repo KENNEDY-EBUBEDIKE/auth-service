@@ -1,9 +1,19 @@
-[build]
-buildCommand = "pip install -r requirements.txt && python manage.py collectstatic --noinput"
-
-[deploy]
-startCommand = "docker compose up"
+#[build]
+#buildCommand = "pip install -r requirements.txt && python manage.py collectstatic --noinput"
+#
+#[deploy]
 #startCommand = "python manage.py migrate && gunicorn auth_service.wsgi:application --workers 4 --bind 0.0.0.0:$PORT"
 #healthcheckPath = "/swagger/"
 #healthcheckTimeout = 300
-restartPolicyType = "ON_FAILURE"
+#restartPolicyType = "ON_FAILURE"
+
+
+
+[build]
+builder = "docker"
+
+[deploy]
+releaseCommand = "python3 manage.py migrate --noinput && python3 manage.py collectstatic --noinput"
+startCommand = "gunicorn --bind 0.0.0.0:$PORT --workers 4 auth_service.wsgi:application"
+healthcheckPath = "/"
+healthcheckTimeout = 100
