@@ -65,6 +65,7 @@ auth_service/
    - API: http://localhost:8000/api/auth/
    - Swagger Documentation: http://localhost:8000/swagger/
    - Admin Panel: http://localhost:8000/admin/
+   - Railway App URL: https://auth-service-production-6598.up.railway.app/
 
 ## Environment Variables
 
